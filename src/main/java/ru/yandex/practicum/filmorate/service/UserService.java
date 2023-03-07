@@ -79,7 +79,7 @@ public class UserService {
     }
 
     //возвращение списка друзей пользователя
-    public List<User> getFriends(long userId) {
+    public Collection<User> getFriends(long userId) {
         log.debug("Получен запрос на получение для пользователя с id={} списка друзей", userId);
         isValidIdUser(userId);
         return friendsDao.getFriends(userId);
