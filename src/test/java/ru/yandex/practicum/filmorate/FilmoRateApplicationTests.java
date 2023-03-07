@@ -26,6 +26,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -68,6 +69,9 @@ class FilmoRateApplicationTests {
         user = userStorage.updateUser(user1Update);
         assertEquals("user1_login_update", user.getName(), "name добавленного пользователя не совпадает.");
         assertThat(user).hasFieldOrPropertyWithValue("name", "user1_login_update");
+        //Удалить пользователья с корректным id
+        userStorage.deleteUser(1);
+
     }
 
     @Test
