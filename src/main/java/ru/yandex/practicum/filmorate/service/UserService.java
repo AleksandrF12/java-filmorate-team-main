@@ -37,7 +37,7 @@ public class UserService {
     }
 
     //возвращает информацию обо всех пользователях
-    public Set<User> getUsers() {
+    public Collection<User> getUsers() {
         log.info("Получен запрос на чтение пользователей...");
         return userStorage.getUsers().stream().collect(Collectors.toSet());
     }
@@ -87,7 +87,7 @@ public class UserService {
 
 
     //список друзей, общих с другим пользователем.
-    public List<User> getCommonFriends(long userId, long otherId) {
+    public Collection<User> getCommonFriends(long userId, long otherId) {
         log.debug("Получен запрос на поиск общих друзей для пользователей с userId={} и otherId={}.", userId, otherId);
         isValidIdUser(userId);
         isValidIdUser(otherId);
