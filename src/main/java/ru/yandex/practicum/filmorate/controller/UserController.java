@@ -37,7 +37,7 @@ public class UserController {
 
     //возвращает информацию обо всех пользователях
     @GetMapping
-    private Set<User> getUsers() {
+    private List<User> getUsers() {
         return userService.getUsers();
     }
 
@@ -71,5 +71,12 @@ public class UserController {
     private List<User> getOtherFriends(@PathVariable("id") long userId, @PathVariable("otherId") long otherId) {
         log.info("Получен запрос на поиск общих друзей для пользователей с userId={} и otherId={}.", userId, otherId);
         return userService.getCommonFriends(userId, otherId);
+    }
+
+    //удаление пользователя по id
+    @DeleteMapping("/{id}")
+    protected void deleteUser(@PathVariable("id") long id) {
+        log.info("Получен запрос на удаление пользователем: {}",id);
+        userService.deleteUserById(id);
     }
 }

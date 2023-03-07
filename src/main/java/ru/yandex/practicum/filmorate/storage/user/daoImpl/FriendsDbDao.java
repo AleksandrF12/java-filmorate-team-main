@@ -6,12 +6,14 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exceptions.user.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.dao.FriendsDao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @Qualifier("friendsDbDao")
@@ -66,8 +68,8 @@ public class FriendsDbDao implements FriendsDao {
         //существует запись: friendId, userId, true - подтверждённая дружба - удаляем и записываем friendId, userId, false
         //если запись не найдена, то ничего не делаем.
         //считываем из таблицы friends
-        String friendsSql = "select user_id, friend_id, friend_status from friends where (user_id=? and friend_id=?) " +
-                "or (user_id=? and friend_id=?);";
+        String friendsSql = "SELECT user_id, friend_id, friend_status FROM friends WHERE (user_id=? and friend_id=?) " +
+                "OR (user_id=? AND friend_id=?);";
         Object[] args = new Object[]{userId, friendId, friendId, userId};
         SqlRowSet friendsRows = jdbcTemplate.queryForRowSet(friendsSql, args);
         if (friendsRows.first()) {
