@@ -39,7 +39,9 @@ public class UserService {
     //возвращает информацию обо всех пользователях
     public List<User> getUsers() {
         log.info("Получен запрос на чтение пользователей...");
-        return (List<User>) userStorage.getUsers().stream().collect(Collectors.toSet());
+        return userStorage.getUsers().stream()
+                .sorted(Comparator.comparingLong(User::getId))
+                .collect(Collectors.toList());
     }
 
     //получение данных о пользователе
@@ -48,11 +50,6 @@ public class UserService {
 //        isValidIdUser(userId);
         log.info("Пользователь с id={} получен.", userId);
         return userStorage.getUser(userId);
-    }
-
-    public void deleteUser(long userId) {
-        isValidIdUser(userId);
-        userStorage.deleteUser(userId);
     }
 
     //добавление в друзья
@@ -111,4 +108,8 @@ public class UserService {
         }
         return true;
     }
+     public void deleteUserById (long id) {
+         isValidIdUser(id);
+         userStorage.deleteUser(id);
+     }
 }
