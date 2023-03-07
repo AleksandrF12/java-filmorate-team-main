@@ -16,6 +16,7 @@ import ru.yandex.practicum.filmorate.storage.user.dao.UserDao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Comparator;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
