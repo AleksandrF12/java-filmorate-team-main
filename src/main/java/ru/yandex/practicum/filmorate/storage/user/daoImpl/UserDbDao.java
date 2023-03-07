@@ -94,7 +94,7 @@ public class UserDbDao implements UserDao {
     @Override
     public void deleteUser(long userId) {
         log.debug("Получен запрос на удаление пользователя с id={}", userId);
-        String deleteSql = "DELETE FROM films WHERE film_id= ?";
+        String deleteUSerSql = "DELETE FROM films WHERE film_id= ?";
         Object[] args = new Object[]{userId};
         int delRow = jdbcTemplate.update(deleteUSerSql, args);
         if (delRow <= 0) {
