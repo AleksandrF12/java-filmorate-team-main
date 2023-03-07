@@ -66,8 +66,15 @@ public class InMemoryUserStorage implements UserDao {
         return users.get(userId);
     }
 
+    //удаление пользователя
     private long generateId() {
         return ++maxId;
+    }
+
+    @Override
+    public void deleteUser(long userId) {
+        users.remove(userId);
+        log.info("Пользователь с id={} удалён.", userId);
     }
 
 }

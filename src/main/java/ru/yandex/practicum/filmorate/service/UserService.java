@@ -105,4 +105,8 @@ public class UserService {
         }
         return true;
     }
+     public void deleteUserById (long id) {
+         isValidIdUser(id);
+         userStorage.deleteUser(id);
+     }
 }
