@@ -37,7 +37,7 @@ public class UserController {
 
     //возвращает информацию обо всех пользователях
     @GetMapping
-    private Set<User> getUsers() {
+    private List<User> getUsers() {
         return userService.getUsers();
     }
 

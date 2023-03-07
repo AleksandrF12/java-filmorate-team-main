@@ -37,9 +37,9 @@ public class UserService {
     }
 
     //возвращает информацию обо всех пользователях
-    public Set<User> getUsers() {
+    public List<User> getUsers() {
         log.info("Получен запрос на чтение пользователей...");
-        return userStorage.getUsers().stream().collect(Collectors.toSet());
+        return (List<User>) userStorage.getUsers().stream().collect(Collectors.toSet());
     }
 
     //получение данных о пользователе
