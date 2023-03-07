@@ -78,7 +78,6 @@ public class FilmService {
 
     //удаление фильма по id
     public void deleteFilm(long filmId) {
-        isValidFilmId(filmId);
         filmStorage.deleteFilm(filmId);
     }
 
