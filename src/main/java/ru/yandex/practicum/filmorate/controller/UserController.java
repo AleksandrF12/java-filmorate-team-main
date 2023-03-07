@@ -47,12 +47,6 @@ public class UserController {
         return userService.getUser(userId);
     }
 
-    @DeleteMapping("/{id}")
-    protected void deleteUser(@PathVariable("id") long userId) {
-        log.info("Получен запрос на удаление пользователя: {}",userId);
-        userService.deleteUser(userId);
-    }
-
     //добавление в друзья
     @PutMapping("/{id}/friends/{friendId}")
     private void addFriend(@PathVariable("id") long userId, @PathVariable("friendId") long friendId) {
@@ -78,5 +72,4 @@ public class UserController {
         log.info("Получен запрос на поиск общих друзей для пользователей с userId={} и otherId={}.", userId, otherId);
         return userService.getCommonFriends(userId, otherId);
     }
-
 }

@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exceptions.film.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.user.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.dao.UserDao;
@@ -89,19 +88,6 @@ public class UserDbDao implements UserDao {
         }
         log.debug("Найдено пользователей: {} шт.", users.size());
         return users.stream().collect(Collectors.toSet());
-    }
-
-    @Override
-    public void deleteUser(long userId) {
-        log.debug("Получен запрос на удаление пользователя с id={}", userId);
-        String deleteFilmSql = "DELETE FROM films WHERE film_id= ?";
-        Object[] args = new Object[]{userId};
-        int delRow = jdbcTemplate.update(deleteFilmSql, args);
-        if (delRow <= 0) {
-            log.debug("Пользователь с id={} для удаления не найден.", userId);
-            throw new FilmNotFoundException("Пользователь с id=" + userId + " для удаления не найден.");
-        }
-        log.debug("Пользователь с id={} удалён.", userId);
     }
 
     @Override
