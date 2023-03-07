@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.model.validator.DateBefore;
 
@@ -13,7 +12,6 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-@Builder
 //генерирует @Getter,@Setter,@ToString,@EqualsAndHashCode,@RequiredArgsConstructor
 public class Film {
     private long id; //целочисленный идентификатор
@@ -35,8 +33,6 @@ public class Film {
     private MPA mpa; //рейтинг фильма
 
     private Set<Genre> genres; //жанр фильма
-
-    private Set<Director> directors; //режиссеры фильма
 
     public Set<Genre> getGenres() {
         return genres;

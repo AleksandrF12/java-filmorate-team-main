@@ -37,11 +37,9 @@ public class UserService {
     }
 
     //возвращает информацию обо всех пользователях
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         log.info("Получен запрос на чтение пользователей...");
-        return userStorage.getUsers().stream()
-                .sorted(Comparator.comparingLong(User::getId))
-                .collect(Collectors.toList());
+        return userStorage.getUsers().stream().collect(Collectors.toSet());
     }
 
     //получение данных о пользователе
@@ -50,6 +48,11 @@ public class UserService {
 //        isValidIdUser(userId);
         log.info("Пользователь с id={} получен.", userId);
         return userStorage.getUser(userId);
+    }
+
+    public void deleteUser(long userId) {
+        isValidIdUser(userId);
+        userStorage.deleteUser(userId);
     }
 
     //добавление в друзья
@@ -79,7 +82,6 @@ public class UserService {
     public List<User> getFriends(long userId) {
         log.debug("Получен запрос на получение для пользователя с id={} списка друзей", userId);
         isValidIdUser(userId);
-        userStorage.getUser(userId);
         return friendsDao.getFriends(userId);
     }
 
@@ -108,8 +110,4 @@ public class UserService {
         }
         return true;
     }
-     public void deleteUserById (long id) {
-         isValidIdUser(id);
-         userStorage.deleteUser(id);
-     }
 }
