@@ -93,13 +93,16 @@ public class UserDbDao implements UserDao {
 
     @Override
     public void deleteUser(long userId) {
-            final String sql = "DELETE FROM FRIENDS where USER_ID = ? ";
-            jdbcTemplate.update(sql, userId);
-            final String sql2 = "DELETE FROM FRIENDS where FRIEND_ID = ? ";
-            jdbcTemplate.update(sql2, userId);
-            final String sql3 = "DELETE FROM USERS  where USER_ID = ? ";
-            jdbcTemplate.update(sql3, userId);
+        log.debug("Получен запрос на удаление пользователя с id={}", userId);
+        String deleteSql = "DELETE FROM films WHERE film_id= ?";
+        Object[] args = new Object[]{userId};
+        int delRow = jdbcTemplate.update(deleteUSerSql, args);
+        if (delRow <= 0) {
+            log.debug("Пользователь с id={} для удаления не найден.", userId);
+            throw new FilmNotFoundException("Пользователь с id=" + userId + " для удаления не найден.");
         }
+        log.debug("Пользователь с id={} удалён.", userId);
+    }
 
     @Override
     public User getUser(long userId) {
