@@ -76,8 +76,4 @@ public class InMemoryUserStorage implements UserDao {
         return ++maxId;
     }
 
-    @Override
-    public void deleteUser(Long id) {
-        throw  new UnsupportedOperationException("Метод не поддерживается в данной реализации хранилища");
-    }
 }
