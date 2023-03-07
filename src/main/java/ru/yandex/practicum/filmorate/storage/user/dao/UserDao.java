@@ -11,5 +11,7 @@ public interface UserDao {
 
     Set<User> getUsers();
 
+    void deleteUser(long userId);
+
     User getUser(long userId);
 }

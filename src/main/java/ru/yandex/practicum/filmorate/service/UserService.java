@@ -37,7 +37,7 @@ public class UserService {
     }
 
     //возвращает информацию обо всех пользователях
-    public Set<User> getUsers() {
+    public Collection<User> getUsers() {
         log.info("Получен запрос на чтение пользователей...");
         return userStorage.getUsers().stream().collect(Collectors.toSet());
     }
@@ -48,6 +48,11 @@ public class UserService {
 //        isValidIdUser(userId);
         log.info("Пользователь с id={} получен.", userId);
         return userStorage.getUser(userId);
+    }
+
+    public void deleteUser(long userId) {
+        isValidIdUser(userId);
+        userStorage.deleteUser(userId);
     }
 
     //добавление в друзья
@@ -74,7 +79,7 @@ public class UserService {
     }
 
     //возвращение списка друзей пользователя
-    public List<User> getFriends(long userId) {
+    public Collection<User> getFriends(long userId) {
         log.debug("Получен запрос на получение для пользователя с id={} списка друзей", userId);
         isValidIdUser(userId);
         return friendsDao.getFriends(userId);
@@ -82,7 +87,7 @@ public class UserService {
 
 
     //список друзей, общих с другим пользователем.
-    public List<User> getCommonFriends(long userId, long otherId) {
+    public Collection<User> getCommonFriends(long userId, long otherId) {
         log.debug("Получен запрос на поиск общих друзей для пользователей с userId={} и otherId={}.", userId, otherId);
         isValidIdUser(userId);
         isValidIdUser(otherId);

@@ -15,6 +15,7 @@ import ru.yandex.practicum.filmorate.storage.film.dao.GenreDao;
 import ru.yandex.practicum.filmorate.storage.film.dao.MpaDao;
 import ru.yandex.practicum.filmorate.storage.user.dao.UserDao;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -90,7 +91,7 @@ public class FilmService {
     }
 
     //возвращает информацию обо всех фильмах
-    public List<Film> getFilms() {
+    public Collection<Film> getFilms() {
         return filmStorage.getFilms();
     }
 
@@ -121,7 +122,7 @@ public class FilmService {
     }
 
     //вывод популярных фильмов,если параметр не задан, то выводим 10 фильмов
-    public List<Film> getPopularFilms(long count) {
+    public Collection<Film> getPopularFilms(long count) {
         //проверка корректности значения count : null, меньше 0
         if (count <= 0) {
             throw new ValidationException("Запрошено отрицательное количество популярных фильмов.");

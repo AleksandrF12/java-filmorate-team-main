@@ -50,7 +50,7 @@ public class FilmController {
 
     //возвращает информацию обо всех фильмах
     @GetMapping
-    protected List<Film> getFilms() {
+    protected Collection<Film> getFilms() {
         log.info("Получен запрос на чтение всех фильмов.");
         return filmService.getFilms();
     }
@@ -69,7 +69,7 @@ public class FilmController {
 
     //вернуть самые популярные фильмы
     @GetMapping("/popular")
-    protected List<Film> getPopularFilms(@RequestParam(defaultValue = "10", required = false) Long count) {
+    protected Collection<Film> getPopularFilms(@RequestParam(defaultValue = "10", required = false) Long count) {
         log.info("1.Запрос на получение {} популярных фильмов...", count);
         return filmService.getPopularFilms(count);
     }

@@ -37,7 +37,7 @@ public class UserController {
 
     //возвращает информацию обо всех пользователях
     @GetMapping
-    private Set<User> getUsers() {
+    private Collection<User> getUsers() {
         return userService.getUsers();
     }
 
@@ -45,6 +45,12 @@ public class UserController {
     @GetMapping("/{id}")
     private User getUser(@PathVariable("id") long userId) {
         return userService.getUser(userId);
+    }
+
+    @DeleteMapping("/{id}")
+    protected void deleteUser(@PathVariable("id") long userId) {
+        log.info("Получен запрос на удаление пользователя: {}",userId);
+        userService.deleteUser(userId);
     }
 
     //добавление в друзья
@@ -61,15 +67,16 @@ public class UserController {
 
     //возвращение списка друзей пользователя
     @GetMapping("/{id}/friends")
-    private List<User> getFriends(@PathVariable("id") long userId) {
+    private  Collection<User> getFriends(@PathVariable("id") long userId) {
         log.info("Получен запрос на получение для пользователя с id={} списка друзей", userId);
         return userService.getFriends(userId);
     }
 
     //список друзей, общих с другим пользователем.
     @GetMapping("/{id}/friends/common/{otherId}")
-    private List<User> getOtherFriends(@PathVariable("id") long userId, @PathVariable("otherId") long otherId) {
+    private Collection<User> getOtherFriends(@PathVariable("id") long userId, @PathVariable("otherId") long otherId) {
         log.info("Получен запрос на поиск общих друзей для пользователей с userId={} и otherId={}.", userId, otherId);
         return userService.getCommonFriends(userId, otherId);
     }
+
 }
