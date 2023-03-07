@@ -7,7 +7,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.dao.UserDao;
 
 import java.util.*;
-
+import java.util.stream.Collectors;
 
 //реализация методов добавления, удаления и модификации объектов.
 @Component("userInMemoryDao")
@@ -15,7 +15,7 @@ import java.util.*;
 public class InMemoryUserStorage implements UserDao {
     private long maxId = 0;
 
-    private final Map<Long, User> users = new HashMap<>(); //информация о пользователях
+    private Map<Long, User> users = new HashMap<>(); //информация о пользователях
 
     @Override
     public User addUser(User user) {
@@ -53,7 +53,7 @@ public class InMemoryUserStorage implements UserDao {
     @Override
     public Set<User> getUsers() {
         log.info("Получен список пользователей.");
-        return new HashSet<>(this.users.values());
+        return this.users.values().stream().collect(Collectors.toSet());
     }
 
     //возвращает данные о пользователе
@@ -68,16 +68,13 @@ public class InMemoryUserStorage implements UserDao {
 
     @Override
     public void deleteUser(long userId) {
+            users.remove(userId);
+            log.info("Фильм с id={} удалён.", userId);
+        }
 
-    }
 
-    //удаление пользователя
     private long generateId() {
         return ++maxId;
     }
 
-    @Override
-    public void deleteUser(Long id) {
-        throw  new UnsupportedOperationException("Метод не поддерживается в данной реализации хранилища");
-    }
 }

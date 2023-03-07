@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exceptions.film.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.user.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.dao.UserDao;
@@ -104,14 +103,6 @@ public class UserDbDao implements UserDao {
         return user;
     }
 
-    private User userMapper(ResultSet rs) throws SQLException {
-        //перебираем записи результирующего набора
-        return new User(rs.getLong("user_id"),
-                rs.getString("email"),
-                rs.getString("login"),
-                rs.getString("name"),
-                rs.getDate("birthday").toLocalDate());
-    }
     @Override
     public void deleteUser(long userId) {
         log.debug("Получен запрос на удаление пользователя с id={}", userId);
@@ -122,5 +113,14 @@ public class UserDbDao implements UserDao {
             throw new UserNotFoundException("Пользователь с id=" + userId + " для удаления не найден.");
         }
         log.debug("Пользователь с id={} удалён.", userId);
+    }
+
+    private User userMapper(ResultSet rs) throws SQLException {
+        //перебираем записи результирующего набора
+        return new User(rs.getLong("user_id"),
+                rs.getString("email"),
+                rs.getString("login"),
+                rs.getString("name"),
+                rs.getDate("birthday").toLocalDate());
     }
 }

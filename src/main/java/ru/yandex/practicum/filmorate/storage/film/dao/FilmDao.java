@@ -20,4 +20,6 @@ public interface FilmDao {
     Film getFilm(long filmId);
     List<Film> getFilms();
     List<Film> getPopularFilms(long maxCount);
+
+    List<Film> getDirectorsFilms(int directorId, String sortBy);
 }

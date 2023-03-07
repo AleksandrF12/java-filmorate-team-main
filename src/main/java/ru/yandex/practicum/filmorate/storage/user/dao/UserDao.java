@@ -13,6 +13,5 @@ public interface UserDao {
 
     User getUser(long userId);
 
-    //удаление пользователя
     void deleteUser(long userId);
 }
