@@ -50,6 +50,11 @@ public class UserService {
         return userStorage.getUser(userId);
     }
 
+    public void deleteUser(long userId) {
+        isValidIdUser(userId);
+        userStorage.deleteUser(userId);
+    }
+
     //добавление в друзья
     public void addFriend(long userId, long friendId) {
         log.debug("Получен запрос на добавление для пользователя с id={} друга с id={}", userId, friendId);
