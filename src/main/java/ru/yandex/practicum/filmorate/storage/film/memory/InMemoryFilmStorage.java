@@ -137,8 +137,7 @@ public class InMemoryFilmStorage implements FilmDao {
     }
 
     @Override
-    public List<Film> getDirectorsFilms(int directorId, String sortBy) {
-        log.debug("Request to get directors films from DB.");
+    public Object getPopularFilmGenreIdYear(long year, long genreId, long count) {
         return null;
     }
 
@@ -147,13 +146,4 @@ public class InMemoryFilmStorage implements FilmDao {
         return ++maxId;
     }
 
-    @Override
-    public List<Film> getFilms(List<Long> filmsId) {
-        return null;
-    }
-
-    @Override
-    public List<Film> getCommonFilms(long userId, long friendId) {
-        return null;
-    }
 }

@@ -2,22 +2,24 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.SortingIsNotSupportedException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.exceptions.director.DirectorNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.film.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.user.UserNotFoundException;
-import ru.yandex.practicum.filmorate.model.*;
-import ru.yandex.practicum.filmorate.storage.film.dao.*;
-import ru.yandex.practicum.filmorate.storage.film.daoImpl.DirectorDaoImpl;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.MPA;
+import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.film.dao.FilmLikeDao;
+import ru.yandex.practicum.filmorate.storage.film.dao.FilmDao;
+import ru.yandex.practicum.filmorate.storage.film.dao.GenreDao;
+import ru.yandex.practicum.filmorate.storage.film.dao.MpaDao;
 import ru.yandex.practicum.filmorate.storage.user.dao.UserDao;
 
-
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 //отвечает за операции с фильмами, — добавление и удаление лайка, вывод 10 наиболее популярных фильмов
 // по количеству лайков. Пусть пока каждый пользователь может поставить лайк фильму только один раз.
@@ -30,20 +32,13 @@ public class FilmService {
     private final MpaDao mpaDao;
     private final FilmLikeDao filmLikeDao;
     private final GenreDao genreDao;
-    private final DirectorDao directorDao;
 
-    public FilmService(FilmDao filmStorage,
-                       UserDao userStorage,
-                       MpaDao mpaDao,
-                       FilmLikeDao filmLikeDao,
-                       GenreDao genreDao,
-                       DirectorDao directorDao) {
+    public FilmService(FilmDao filmStorage, UserDao userStorage, MpaDao mpaDao, FilmLikeDao filmLikeDao, GenreDao genreDao) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
         this.mpaDao = mpaDao;
         this.filmLikeDao = filmLikeDao;
         this.genreDao = genreDao;
-        this.directorDao = directorDao;
     }
 
     //добавляем фильм
@@ -61,12 +56,6 @@ public class FilmService {
                 throw new ValidationException("Для обновляемого фильма не найдены все жанры.");
             }
         }
-
-        //проверка наличия режиссера в таблице directors
-        if (film.getDirectors() != null && !film.getDirectors().isEmpty())
-            if (!isDirectors(film.getDirectors()))
-                throw new ValidationException("Для фильма не найдены все режиссеры.");
-
         return filmStorage.addFilm(film);
     }
 
@@ -86,10 +75,6 @@ public class FilmService {
                 throw new ValidationException("Для обновляемого фильма не найдены все жанры.");
             }
         }
-
-        if ((film.getDirectors() != null && !film.getDirectors().isEmpty()) && !isDirectors(film.getDirectors()))
-            throw new ValidationException("Для фильма не найдены все режиссеры.");
-
         return filmStorage.updateFilm(film);
     }
 
@@ -147,34 +132,6 @@ public class FilmService {
         return filmStorage.getPopularFilms(count);
     }
 
-    public List<Film> getDirectorFilms(int directorId, String sortBy) {
-        if (directorDao.getDirectorById(directorId).isEmpty()) {
-            log.debug("Director with id = {} is not exist.", directorId);
-            throw new DirectorNotFoundException("Director with id = {" + directorId  + "} is not exist.");
-        }
-
-        if (!sortBy.equals("year") && !sortBy.equals("likes")) {
-            log.debug("Sorting {} is not supported.", sortBy);
-            throw new SortingIsNotSupportedException("Sorting " + sortBy + " is not supported.");
-        }
-
-        return filmStorage.getDirectorsFilms(directorId, sortBy);
-    }
-
-    //вернуть общие фильмы для пользователей
-    public List<Film> getCommonFilms(Optional<String> userId, Optional<String> friendId) {
-        log.info("FilmService: Запрошены общие фильмы пользователей.");
-        long userIdTrue = getDigitOfString(userId);
-        long friendIdTrue = getDigitOfString(friendId);
-        //проверка значений userId и friendId как на значение >0, так и на соответствие Long
-        log.info("FilmService: Запрос на получение общих фильмов пользователей с userId={} и friendId={}..."
-                , userIdTrue, friendIdTrue);
-        isValidUserId(userIdTrue);
-        isValidUserId(friendIdTrue);
-        isNotEqualIdUser(userIdTrue, friendIdTrue);
-        return filmStorage.getCommonFilms(userIdTrue, friendIdTrue);
-    }
-
     //проверка корректности значений filmId
     private boolean isValidFilmId(long filmId) {
         if (filmId <= 0) {
@@ -214,42 +171,13 @@ public class FilmService {
         return true;
     }
 
-    private boolean isDirectors(Set<Director> directors) {
-        List<Integer> directorsId = directorDao.getAllDirectors().stream().map(Director::getId).collect(Collectors.toList());
-        for(Director director : directors) {
-            if(!directorsId.contains(director.getId())) {
-                log.debug("Для фильма не найден директор с id=" + director.getId());
-                return false;
-            }
+    public List<Film> getPopularFilmGenreIdYear(long count, long genreId, long year){
+        List<Long> filmIdSorted = new ArrayList<>((Collection) filmStorage.getPopularFilmGenreIdYear(year, genreId, count));
+        List<Film> mutualFilmList = new ArrayList<>();
+        for(long t: filmIdSorted){
+            mutualFilmList.add(filmStorage.getFilm(t));
         }
-        return true;
+
+        return mutualFilmList;
     }
-
-    //возвращает из строки числовое значение
-
-    private Long getDigitOfString(Optional<String> str) {
-        return Stream.of(str.get())
-                .limit(1)
-                .map(this::stringParseLong)
-                .findFirst()
-                .get();
-    }
-
-
-    //проверяет не равныли id пользователя и друга
-    public boolean isNotEqualIdUser(long userId, long friendId) {
-        if (userId == friendId) {
-            throw new UserNotFoundException("Пользователь с id=" + userId + " не может добавить сам себя в друзья.");
-        }
-        return true;
-    }
-
-    private Long stringParseLong(String str) {
-        try {
-            return Long.parseLong(str);
-        } catch (RuntimeException e) {
-            throw new ValidationException("Передан некорректный userId.");
-        }
-    }
-
 }

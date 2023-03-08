@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
@@ -22,7 +21,7 @@ public class FilmController {
 
     //добавление фильма
     @PostMapping
-    protected Film addFilm(@Valid @RequestBody Film film) {
+    protected  Film addFilm(@Valid @RequestBody Film film) {
         log.info("Получен запрос на добавление фильма: {}",film.getName());
         return filmService.addFilm(film);
     }
@@ -41,6 +40,13 @@ public class FilmController {
         filmService.deleteFilm(filmId);
     }
 
+    @GetMapping( "/popular") //films/popular?count={limit}&genreId={genreId}&year={year}
+
+    public List<Film> getPopularFilmGenreIdYear(@RequestParam (defaultValue = "10") Integer count,
+                                                @RequestParam (defaultValue = "0") Integer genreId,
+                                                @RequestParam (defaultValue = "0") Integer year){
+        return filmService.getPopularFilmGenreIdYear(count, genreId, year);
+    }
     //получение фильма по id
     @GetMapping("/{id}")
     protected Film getFilm(@PathVariable("id") long filmId) {
@@ -69,25 +75,11 @@ public class FilmController {
 
     //вернуть самые популярные фильмы
     @GetMapping("/popular")
-    protected List<Film> getPopularFilms(@RequestParam(defaultValue = "10", required = false) Long count) {
+    protected List<Film> getPopularFilms(@RequestParam(defaultValue = "10",
+                                         required = false) Long count) {
         log.info("1.Запрос на получение {} популярных фильмов...", count);
         return filmService.getPopularFilms(count);
     }
 
-    //вернуть общие фильмы для пользователей
-    //GET /films/common?userId={userId}&friendId={friendId}
-    @GetMapping("/common")
-    protected List<Film> getCommonFilms(@RequestParam Optional<String> userId,@RequestParam Optional<String> friendId) {
-        log.info("FilmController: Запрос на получение общих фильмов пользователей с userId={} и friendId={}..."
-                , userId,friendId);
-        return filmService.getCommonFilms(userId,friendId);
-    }
 
-
-    @GetMapping("/director/{directorId}")
-    protected List<Film> getDirectorFilms(@PathVariable int directorId,
-                                          @RequestParam String sortBy) {
-        log.debug("Request to get directors films. SortBy = " + sortBy + ".");
-        return filmService.getDirectorFilms(directorId, sortBy);
-    }
 }

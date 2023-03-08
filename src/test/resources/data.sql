@@ -30,6 +30,7 @@ INSERT INTO genre(genre_name) VALUES('Комедия'),
                                     ('Документальный'),
                                     ('Боевик');
 
+
 --заполняем таблицу users
 INSERT INTO users(email,login,name,birthday) VALUES('user1@mail.ru','user1_login','user1_name','1990-12-01'),
                                                     ('user2@yandex.ru','user2_login','user2_name','2000-05-09'),
@@ -73,9 +74,4 @@ INSERT INTO films_like(film_id,user_id) VALUES(1,2),
                                             (2,3),
                                             (2,4),
                                             (2,5),
-                                            (3,6),
-                                            (1,1),
-                                            (1,3),
-                                            (2,1),
-                                            (4,1),
-                                            (4,2);
+                                            (3,6);
