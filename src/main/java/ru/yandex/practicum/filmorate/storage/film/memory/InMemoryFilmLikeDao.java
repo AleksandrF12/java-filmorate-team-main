@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.storage.film.memory;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.dao.FilmLikeDao;
 
 import java.util.*;
@@ -50,5 +51,10 @@ public class InMemoryFilmLikeDao implements FilmLikeDao {
         }
         log.debug("Возвращено {} популярных фильмов.",popFilms.size());
         return popFilms;
+    }
+
+    @Override
+    public List<Film> getRecomendationFilm(long userId) {
+        return null;
     }
 }

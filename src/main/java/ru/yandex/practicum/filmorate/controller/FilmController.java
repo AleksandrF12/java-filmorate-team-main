@@ -73,4 +73,21 @@ public class FilmController {
         log.info("1.Запрос на получение {} популярных фильмов...", count);
         return filmService.getPopularFilms(count);
     }
+
+    //вернуть общие фильмы для пользователей
+    //GET /films/common?userId={userId}&friendId={friendId}
+    @GetMapping("/common")
+    protected List<Film> getCommonFilms(@RequestParam Optional<String> userId,@RequestParam Optional<String> friendId) {
+        log.info("FilmController: Запрос на получение общих фильмов пользователей с userId={} и friendId={}..."
+                , userId,friendId);
+        return filmService.getCommonFilms(userId,friendId);
+    }
+
+
+    @GetMapping("/director/{directorId}")
+    protected List<Film> getDirectorFilms(@PathVariable int directorId,
+                                          @RequestParam String sortBy) {
+        log.debug("Request to get directors films. SortBy = " + sortBy + ".");
+        return filmService.getDirectorFilms(directorId, sortBy);
+    }
 }

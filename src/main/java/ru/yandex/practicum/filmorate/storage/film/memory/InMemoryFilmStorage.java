@@ -136,9 +136,24 @@ public class InMemoryFilmStorage implements FilmDao {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<Film> getDirectorsFilms(int directorId, String sortBy) {
+        log.debug("Request to get directors films from DB.");
+        return null;
+    }
+
     //генерация очередного id фильма
     private int generateId() {
         return ++maxId;
     }
 
+    @Override
+    public List<Film> getFilms(List<Long> filmsId) {
+        return null;
+    }
+
+    @Override
+    public List<Film> getCommonFilms(long userId, long friendId) {
+        return null;
+    }
 }

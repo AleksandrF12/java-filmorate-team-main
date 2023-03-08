@@ -47,13 +47,13 @@ class FilmoRateApplicationTests {
             LocalDate.of(2002, 5, 3));
     private final Film film = new Film(1, "film1_test_name", "film1_test_description",
             LocalDate.of(2018, 1, 1), 180, 4, new MPA(1, "R"),
-            Set.of(new Genre(1, "Комедия"), new Genre(4, "Триллер")));
+            Set.of(new Genre(1, "Комедия"), new Genre(4, "Триллер")), null);
     private final Film filmUpdateUnknown = new Film(9999, "film1_test_name", "film1_test_description",
             LocalDate.of(2018, 1, 1), 180, 4, new MPA(1, "R"),
-            Set.of(new Genre(1, "Комедия"), new Genre(4, "Триллер")));
+            Set.of(new Genre(1, "Комедия"), new Genre(4, "Триллер")), null);
     private final Film filmUpdateCorrect = new Film(5, "film1_test_name_update",
             "film1_test_description_update", LocalDate.of(2019, 1, 1), 170, 7,
-            new MPA(1, "G"), Set.of(new Genre(5, "Документальный"), new Genre(4, "Триллер")));
+            new MPA(1, "G"), Set.of(new Genre(5, "Документальный"), new Genre(4, "Триллер")), null);
 
     @Test
     public void testCrudUsers() {
